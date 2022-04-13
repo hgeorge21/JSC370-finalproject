@@ -1,5 +1,5 @@
 name: "my-website"
-output_dir: "docs"
+output_dir: "."
 navbar:
   title: "JSC370 Final Project"
   left:
@@ -15,9 +15,7 @@ navbar:
           href: indicators.html
     - text: "U.S. Economy and Market"
       icon: fa-chart-bar
-      menu:
-        - text: "Market"
-          href: USonly.html
+      href: USonly.html
     - text: "Data Analytics"
       href: analytics.html
   right:
@@ -26,6 +24,8 @@ navbar:
       href: https://github.com/JSC370/jsc370-2022/
     - text: "JSC370 Home"
       href: https://jsc370.github.io/jsc370-2022/
+    - text: "Project Repo"
+      href: https://github.com/hgeorge21/JSC370-finalproject/
 output:
   html_document:
     theme: cosmo
