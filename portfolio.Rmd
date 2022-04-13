@@ -1,7 +1,5 @@
 ---
 title: "Asset Performance"
-author: "Yongzhen Huang"
-date: "3/10/2022"
 output: html_document
 ---
 
@@ -13,6 +11,14 @@ library(dplyr)
 library(data.table)
 library(plotly)
 ```
+
+In this page, we will examine the performance of different asset classes and
+how they correlate with inflation. The main ones we will focus on are
+
+* Equities and ETFs (different sectors)
+* Housing prices
+
+<br>
 
 ## U.S. Market and Sector ETFs
 ```{r loadetf_map, echo=F}
@@ -45,7 +51,7 @@ prices <- merge(x=prices, y=first_px, by='sym')
 prices['normPx'] <- prices['close'] / prices['firstPx']
 ```
 
-## U.S. Market and Sector ETFs {.tabset}
+## {.tabset}
 ### Raw Prices
 ```{r echo=F}
 prices %>%
