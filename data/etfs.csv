@@ -1,0 +1,15 @@
+Index,Name,ETF
+GSPC,S&P 500,SPY
+DJIA,Dow Jones Industrial Average,DIA
+NDX,NASDAQ-100,QQQ
+SP500-50,S&P Communication Services Select Sector,XLC
+SP500-25,S&P Consumer Discretionary Select Sector,XLY
+SP500-30,S&P Consumer Staples Select Sector,XLP
+GSPE,S&P Energy Select Sector,XLE
+SP500-40,S&P Financial Select Sector,XLF
+SP500-35,S&P Health Care Select Sector,XLV
+SP500-20,S&P Industrial Select Sector,XLI
+SP500-15,S&P Materials Select Sector,XLB
+SP500-60,S&P Real Estate Select Sector,XLRE
+SP500-45,S&P Technology Select Sector,XLK
+SP500-55,S&P Utilities Select Sector,XLU

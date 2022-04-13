@@ -1,10 +1,56 @@
 ---
-title: "Analysis on Google Play Apps"
+title: "Analysis on Inflation"
 author: "George Huang"
 output: 
     html_document:
         toc: TRUE
         toc_float: TRUE
+params:
+  portfolio: "sample.csv"
+
 ---
 
-This is my JSC370 Final Project website.
+## Introduction
+This project aims to answer how inflation is tied to an economy and the economic growth, and how one may combat inflation.
+
+We currently live in a special time in history. While we are still dealing with an ongoing global pandemic,
+the economy is also faced with high inflation. High inflation often leads to higher cost of living and decreased
+living standard. The goal of this project is to analyze the effect of inflation on the economy. 
+In the first part (midterm project), we will examine past inflation data and various economic metrics; this includes but not limited to inflation's effect on cost of living and different assets. 
+
+Therefore, the main question we aim to answer are the following
+
+1. How does inflation affect the overall economy and economic growth (e.g. GDP)?
+2. How does inflation affect the standard of living i.e. CPI?
+3. How are different assets affected by inflation (e.g. real estate, stocks)
+4. How can one protect themselves from inflation by constructing a portfolio of assets?
+   This looks at broader market in terms of different industrial sectors (in Part 2 of Project)
+
+
+## Data Source
+### Economic Data
+The first set of data are important economic metrics and indicators.
+The data is extracted from [World Bank](https://data.worldbank.org/indicator). The following indicators are used:
+
+1. GDP (Current US $)
+2. GDP growth (annual %)
+3. Inflation (annual %)
+4. Inflation, consumer prices (annual %)
+
+Another source of data is from Organisation for Economic Co-operation and Development ([OECD](https://www.oecd.org/)).
+Data from OECD includes
+
+1. Inflation
+2. Housing Prices
+3. Shares Prices
+
+### Stock Price Data
+Stock data are mainly extracted from [Alpha Vantage](https://www.alphavantage.co/) and [Finnhub](https://finnhub.io/).
+
+
+# PDF Report Download
+Click [here](https://hgeorge21.github.io/JSC370-finalproject/noreportError.html) to download report
+
+
+
+
