@@ -1,0 +1,167 @@
+---
+title: "Analysis on Inflation"
+output: html_document
+---
+
+
+```{r echo=F, warning=F, message=F}
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(data.table)
+library(DT)
+library(plotly)
+
+fpath <- "./data/"
+
+CPI <- read.csv(paste0(fpath, "CPI.csv"))
+GDP <- read.csv(paste0(fpath, "GDP.csv"))
+GDPgrowth <- read.csv(paste0(fpath, "GDPgrowth.csv"))
+Inflation <- read.csv(paste0(fpath, "Inflation.csv"))
+
+houseCost <- read.csv(paste0(fpath, "HouseCost.csv"))
+sharePrice <- read.csv(paste0(fpath, "SharePrice.csv"))
+```
+
+```{r echo=F}
+CPI <- CPI %>%
+  gather("Year", "CPI", X1960:X2020, na.rm=T) %>%
+  mutate(Year=as.integer(substr(Year, 2, 5)))
+
+GDP <- GDP%>%
+  gather("Year", "GDP", X1960:X2020, na.rm=T) %>%
+  mutate(Year=as.integer(substr(Year, 2, 5)))
+
+GDPgrowth <- GDPgrowth %>%
+  gather("Year", "GDPgrowth", X1960:X2020, na.rm=T) %>%
+  mutate(Year=as.integer(substr(Year, 2, 5)))
+
+Inflation <- Inflation %>%
+  gather("Year", "Inflation", X1960:X2020, na.rm=T) %>%
+  mutate(Year=as.integer(substr(Year, 2, 5)))
+
+houseCost <- houseCost %>%
+  filter(SUBJECT == "PRICERENT") %>%
+  select(c("LOCATION", "TIME", "Value")) %>%
+  filter(nchar(TIME) == 4) %>%
+  mutate(Country.Code=LOCATION,
+         Year=as.integer(TIME),
+         HouseCost=Value) %>%
+  select(c("Country.Code", "Year", "HouseCost"))
+
+sharePrice <- sharePrice %>%
+  select(c("LOCATION", "TIME", "Value")) %>%
+  filter(nchar(TIME) == 4) %>%
+  mutate(Country.Code=LOCATION,
+         Year=as.integer(TIME),
+         SharePrice=Value) %>%
+  select(c("Country.Code", "Year", "SharePrice"))
+```
+
+```{r echo=F}
+df1 <- merge(x=GDP, y=CPI, by=c("Country.Name","Country.Code", "Year"), all.x=T)
+df1 <- merge(x=df1, y=GDPgrowth, by=c("Country.Name","Country.Code", "Year"), all.x=T)
+df1 <- merge(x=df1, y=Inflation, by=c("Country.Name","Country.Code", "Year"), all.x=T)
+df2 <- merge(x=houseCost, y=sharePrice, by=c("Country.Code", "Year"), all.x=T)
+
+df <- merge(x=df1, y=df2, by=c("Country.Code", "Year"), all.x=T)
+df <- df %>%
+  drop_na()
+```
+
+
+```{r echo=F}
+df2020 <- df %>%
+  filter(Year == 2020)
+```
+
+
+
+# Current State of Global Economy {.tabset}
+
+Examining inflation in 2020 with various factor by country. Inflation is calculated as increase in CPI (consumer price index)
+
+From the graphs, there are some interesting patterns
+
+1. Larger economies tend to have lower inflation, which is expected
+2. Visually, there appears to be a positive correlation between GDP growth and inflation
+3. Housing cost does not seem to have a correlation with inflation, this is likely
+   because either housing cost is not normalized to year-over-year increase or simply
+   the fact that most CPI metrics do not take housing cost into account.
+4. There is also a positive correlation between inflation and share price which is interesting
+
+Finally, the country that stands out the most is Turkey, with the inflation well-ahead of other countries at >12%.
+
+## GDP 
+```{r echo=F, warning=F, message=F}
+df2020 %>%
+  filter(!is.na(Inflation) && !is.na(GDP)) %>%
+  plot_ly(x=~GDP, y=~Inflation,
+          type='scatter', mode='markers', color=~Country.Name,
+          size=~GDP,
+          marker=list(sizemode="diameter", opacity=0.5),
+          hover_info='text',
+          text=~paste("Country: ", Country.Name, "<br>",
+                      "GDP: $", round(1e-9*GDP,2), "B")
+          ) %>%
+  layout(title="Inflation vs GDP",
+         yaxis=list(title="Inflation (%)"),
+         xaxis=list(title="GDP (USD)"),
+         hovermode="compare")
+```
+
+
+## GDP Growth
+```{r echo=F, warning=F, message=F}
+df2020 %>%
+  filter(!is.na(Inflation) && !is.na(GDPgrowth)) %>%
+  plot_ly(x=~GDPgrowth, y=~Inflation,
+          type='scatter', mode='markers', color=~Country.Name,
+          size=~GDP,
+          marker=list(sizemode="diameter", opacity=0.5),
+          hover_info='text',
+          text=~paste("Country: ", Country.Name, "<br>",
+                      "GDP: $", round(1e-9*GDP,2), "B")
+          ) %>%
+  layout(title="Inflation vs GDP Growth",
+         yaxis=list(title="Inflation (%)"),
+         xaxis=list(title="GDP Growth (%)"),
+         hovermode="compare")
+```
+
+## House Cost
+```{r echo=F, warning=F, message=F}
+df2020 %>%
+  filter(!is.na(Inflation) && !is.na(HouseCost)) %>%
+  plot_ly(x=~HouseCost, y=~Inflation,
+          type='scatter', mode='markers', color=~Country.Name,
+          size=~GDP,
+          marker=list(sizemode="diameter", opacity=0.5),
+          hover_info='text',
+          text=~paste("Country: ", Country.Name, "<br>",
+                      "GDP: $", round(1e-9*GDP,2), "B")
+          ) %>%
+  layout(title="Inflation vs Housing Cost",
+         yaxis=list(title="Inflation (%)"),
+         xaxis=list(title="House Cost"),
+         hovermode="compare")
+```
+## Share Price
+```{r echo=F, warning=F, message=F}
+df2020 %>%
+  filter(!is.na(Inflation) && !is.na(SharePrice)) %>%
+  plot_ly(x=~SharePrice, y=~Inflation,
+          type='scatter', mode='markers', color=~Country.Name,
+          size=~GDP,
+          marker=list(sizemode="diameter", opacity=0.5),
+          hover_info='text',
+          text=~paste("Country: ", Country.Name, "<br>",
+                      "GDP: $", round(1e-9*GDP,2), "B")
+          ) %>%
+  layout(title="Inflation vs Share Price",
+         yaxis=list(title="Inflation (%)"),
+         xaxis=list(title="Share Price"),
+         hovermode="compare")
+```
+
+

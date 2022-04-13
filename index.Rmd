@@ -22,7 +22,7 @@ The main question we aim to answer are the following
 2. How does inflation affect the standard of living i.e. CPI?
 3. How are different assets affected by inflation (e.g. real estate, stocks)
 4. How can one protect themselves from inflation by constructing a portfolio of assets?
-   This looks at broader market in terms of different industrial sectors (in Part 2 of Project)
+   This looks at broader market in terms of different industrial sectors
 
 
 # Data Source
@@ -47,6 +47,23 @@ Stock data are mainly extracted from [Alpha Vantage](https://www.alphavantage.co
 
 The API for Alpha Vantage and Finnhub are only availble in Python and other non-R languages, and therefore the data is extracted
 in the code [here](https://hgeorge21.github.io/JSC370-finalproject/data_download.py)
+
+
+# Tools Used
+Overall, the main tools used for the project are R and Python.
+
+Python is focused towards data collection from Finnhub and Alpha Vantage for
+market and some economics data focused in the US. Note that an alternative option
+to storing the data for time series, especially stocks prices, is the use of K-database ([`KDB`](https://code.kx.com/q/))
+with the use of `q` language. However, this adds to the complexity of the project
+with the installation requirement, license and etc.; it is thus not used.
+
+R is used for the analytics, data cleaning, and constructing interactive plots
+
+* `tidylr` for piping
+* `dplyr` for table manipulations
+* `data.tables` for more table manipulations
+* `ggplot` and `plotly` for visualization
 
 
 # PDF Report Download

@@ -1,0 +1,223 @@
+---
+title: "Analysis on Inflation"
+output: 
+    html_document:
+        toc: TRUE
+        toc_float: TRUE
+---
+
+
+```{r echo=F, warning=F, message=F}
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(data.table)
+library(DT)
+library(ggplot2)
+library(plotly)
+
+fpath <- "./data/"
+
+CPI <- read.csv(paste0(fpath, "CPI.csv"))
+GDP <- read.csv(paste0(fpath, "GDP.csv"))
+GDPgrowth <- read.csv(paste0(fpath, "GDPgrowth.csv"))
+Inflation <- read.csv(paste0(fpath, "Inflation.csv"))
+
+houseCost <- read.csv(paste0(fpath, "HouseCost.csv"))
+sharePrice <- read.csv(paste0(fpath, "SharePrice.csv"))
+```
+
+
+```{r echo=F}
+CPI <- CPI %>%
+  gather("Year", "CPI", X1960:X2020, na.rm=T) %>%
+  mutate(Year=as.integer(substr(Year, 2, 5)))
+
+GDP <- GDP%>%
+  gather("Year", "GDP", X1960:X2020, na.rm=T) %>%
+  mutate(Year=as.integer(substr(Year, 2, 5)))
+
+GDPgrowth <- GDPgrowth %>%
+  gather("Year", "GDPgrowth", X1960:X2020, na.rm=T) %>%
+  mutate(Year=as.integer(substr(Year, 2, 5)))
+
+Inflation <- Inflation %>%
+  gather("Year", "Inflation", X1960:X2020, na.rm=T) %>%
+  mutate(Year=as.integer(substr(Year, 2, 5)))
+
+houseCost <- houseCost %>%
+  filter(SUBJECT == "PRICERENT") %>%
+  select(c("LOCATION", "TIME", "Value")) %>%
+  filter(nchar(TIME) == 4) %>%
+  mutate(Country.Code=LOCATION,
+         Year=as.integer(TIME),
+         HouseCost=Value) %>%
+  select(c("Country.Code", "Year", "HouseCost"))
+
+sharePrice <- sharePrice %>%
+  select(c("LOCATION", "TIME", "Value")) %>%
+  filter(nchar(TIME) == 4) %>%
+  mutate(Country.Code=LOCATION,
+         Year=as.integer(TIME),
+         SharePrice=Value) %>%
+  select(c("Country.Code", "Year", "SharePrice"))
+```
+
+```{r echo=F}
+df1 <- merge(x=GDP, y=CPI, by=c("Country.Name","Country.Code", "Year"), all.x=T)
+df1 <- merge(x=df1, y=GDPgrowth, by=c("Country.Name","Country.Code", "Year"), all.x=T)
+df1 <- merge(x=df1, y=Inflation, by=c("Country.Name","Country.Code", "Year"), all.x=T)
+df2 <- merge(x=houseCost, y=sharePrice, by=c("Country.Code", "Year"), all.x=T)
+
+df <- merge(x=df1, y=df2, by=c("Country.Code", "Year"), all.x=T)
+```
+
+
+The following tables gives a high-level summary of the data available for different
+countries. The top 25 countries are used here, each has at least 20 years of data.
+
+```{r echo=F}
+df1 <- df1 %>%
+  drop_na()
+df2 <- df2 %>%
+  drop_na()
+
+tab1 <- df1 %>%
+  summarise(
+    numEntries=n(),
+    numCountries=length(unique(Country.Code)),
+    minYear=min(Year),
+    maxYear=max(Year)
+  )
+tab2 <- df2 %>%
+  summarise(
+    numEntries=n(),
+    numCountries=length(unique(Country.Code)),
+    minYear=min(Year),
+    maxYear=max(Year)
+  )
+
+tab1['Source'] <- 'World Bank'
+tab2['Source'] <- 'OCED'
+
+tabSummary <- rbind(tab1, tab2)
+tabSummary <- tabSummary[,c(5,1,2,3,4)]
+knitr::kable(tabSummary, caption="Data Summary")
+```
+
+# Data by Country
+```{r echo=F}
+df <- df %>%
+  drop_na()
+```
+
+```{r echo=F, message=F}
+tab <- 
+  data.table(df)[,.(
+      minYear=min(Year),
+      maxYear=max(Year),
+      nYears=length(unique(Year))
+    ), by=c("Country.Name", "Country.Code")] %>%
+  arrange(across(nYears, desc)) %>%
+  head(25)
+
+# knitr::kable(tab, caption="Overall Summary")
+datatable(tab, options=list(
+  columnDefs = list(list(className = 'dt-center', targets = 5)),
+  pageLength=6
+))
+```
+
+
+```{r warning=F, echo=F}
+dfNew <- df %>%
+  filter(Country.Name %in% unique(tab$Country.Name))
+```
+
+
+```{r echo=F}
+plt_inflation <-
+  ggplot(dfNew, aes(x=Year, y=Inflation, color=Country.Code)) +
+  geom_line() + 
+  labs(title="Inflation (%) of the 15 Countries",
+       xlab="Year",
+       ylab="Inflation (%)")
+
+plt_cpi <- 
+  ggplot(dfNew, aes(x=Year, y=CPI, color=Country.Code)) +
+  geom_line() + 
+  labs(title="Consumer Price Index (CPI) of the 15 Countries",
+       xlab="Year",
+       ylab="CPI")
+
+plt_rentPx <-
+  ggplot(dfNew, aes(x=Year, y=HouseCost, color=Country.Code)) +
+  geom_line() + 
+  labs(title="Normalized Rent Price of the 15 Countries",
+       xlab="Year",
+       ylab="Rent Price")
+
+plt_sharePx <-
+  ggplot(dfNew, aes(x=Year, y=SharePrice, color=Country.Code)) +
+  geom_line() + 
+  labs(title="Share Price of the 15 Countries",
+       xlab="Year",
+       ylab="Share Price")
+
+plt_gdp <-
+  ggplot(dfNew, aes(x=Year, y=GDP, color=Country.Code)) +
+  geom_line() + 
+  labs(title="GDP (USD) of the 15 Countries",
+       xlab="Year",
+       ylab="GDP (USD)")
+
+plt_gdp_growth <-
+  ggplot(dfNew, aes(x=Year, y=GDPgrowth, color=Country.Code)) +
+  geom_line() + 
+  labs(title="GDP Growth (%) of the 15 Countries",
+       xlab="Year",
+       ylab="GDP Growth (%)")
+```
+
+
+# Key Economic Indicators {.tabset}
+
+It is clear that out of these top countries, US has the largest GDP.
+We can also see that in year 2020, most country has highly negative GDP growth, 
+with the exception of Ireland which is interesting.
+
+## Inflation
+```{r echo=F}
+ggplotly(plt_inflation)
+```
+
+## CPI
+```{r echo=F}
+ggplotly(plt_cpi)
+```
+
+## Rent Price
+```{r echo=F}
+ggplotly(plt_rentPx)
+```
+
+## Share Price
+```{r echo=F}
+ggplotly(plt_sharePx)
+```
+
+## GDP
+```{r echo=F}
+ggplotly(plt_gdp)
+```
+
+## GDP Growth
+```{r echo=F}
+ggplotly(plt_gdp_growth)
+```
+
+
+
+
+
+

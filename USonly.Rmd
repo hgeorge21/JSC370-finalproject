@@ -1,6 +1,9 @@
 ---
 title: "Analysis on Inflation"
-output: html_document
+output: 
+    html_document:
+        toc: TRUE
+        toc_float: TRUE
 ---
 
 ```{r setup, message=F, warning=F, include=F}
@@ -23,7 +26,7 @@ how they correlate with inflation. The main ones we will focus on are
 
 <br>
 
-# U.S. Market and Sector ETFs
+# U.S. Equity Market
 ```{r loadetf_map, echo=F}
 etfs <- data.table::fread('./data/etfs.csv')
 knitr::kable(etfs, caption="US Market and Sector Index ETFs")
@@ -54,7 +57,7 @@ prices <- merge(x=prices, y=first_px, by='sym')
 prices['normPx'] <- prices['close'] / prices['firstPx']
 ```
 
-## {.tabset}
+## Price Charts {.tabset}
 ### Raw Prices
 ```{r echo=F}
 prices %>%
