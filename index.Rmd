@@ -8,7 +8,6 @@ params:
   portfolio: "sample.csv"
 
 ---
-
 This project aims to answer how inflation is tied to an economy and the economic growth, and how one may combat inflation.
 
 We currently live in a special time in history. While we are still dealing with an ongoing global pandemic,
@@ -16,7 +15,8 @@ the economy is also faced with high inflation. High inflation often leads to hig
 living standard. The goal of this project is to analyze the effect of inflation on the economy. 
 In the first part (midterm project), we will examine past inflation data and various economic metrics; this includes but not limited to inflation's effect on cost of living and different assets. 
 
-Therefore, the main question we aim to answer are the following
+# Questions of Interest
+The main question we aim to answer are the following
 
 1. How does inflation affect the overall economy and economic growth (e.g. GDP)?
 2. How does inflation affect the standard of living i.e. CPI?
@@ -42,7 +42,7 @@ Data from OECD includes
 2. Housing Prices
 3. Shares Prices
 
-## Stock Price Data
+### Stock Price Data
 Stock data are mainly extracted from [Alpha Vantage](https://www.alphavantage.co/) and [Finnhub](https://finnhub.io/).
 
 The API for Alpha Vantage and Finnhub are only availble in Python and other non-R languages, and therefore the data is extracted
