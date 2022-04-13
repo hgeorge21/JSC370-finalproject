@@ -1,6 +1,5 @@
 ---
-title: "Analysis on Inflation"
-author: "George Huang"
+title: "Introduction"
 output: 
     html_document:
         toc: TRUE
@@ -10,7 +9,6 @@ params:
 
 ---
 
-## Introduction
 This project aims to answer how inflation is tied to an economy and the economic growth, and how one may combat inflation.
 
 We currently live in a special time in history. While we are still dealing with an ongoing global pandemic,
@@ -27,7 +25,7 @@ Therefore, the main question we aim to answer are the following
    This looks at broader market in terms of different industrial sectors (in Part 2 of Project)
 
 
-## Data Source
+# Data Source
 ### Economic Data
 The first set of data are important economic metrics and indicators.
 The data is extracted from [World Bank](https://data.worldbank.org/indicator). The following indicators are used:
@@ -44,8 +42,11 @@ Data from OECD includes
 2. Housing Prices
 3. Shares Prices
 
-### Stock Price Data
+## Stock Price Data
 Stock data are mainly extracted from [Alpha Vantage](https://www.alphavantage.co/) and [Finnhub](https://finnhub.io/).
+
+The API for Alpha Vantage and Finnhub are only availble in Python and other non-R languages, and therefore the data is extracted
+in the code [here](https://hgeorge21.github.io/JSC370-finalproject/data_download.py)
 
 
 # PDF Report Download
