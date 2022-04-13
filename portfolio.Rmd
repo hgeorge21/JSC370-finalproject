@@ -1,5 +1,5 @@
 ---
-title: "Asset Performance"
+title: "Analysis on Inflation"
 output: html_document
 ---
 
@@ -12,7 +12,8 @@ library(data.table)
 library(plotly)
 ```
 
-In this page, we will examine the performance of different asset classes and
+# Overview
+Here, we will examine the performance of different asset classes and
 how they correlate with inflation. The main ones we will focus on are
 
 * Equities and ETFs (different sectors)
@@ -20,7 +21,7 @@ how they correlate with inflation. The main ones we will focus on are
 
 <br>
 
-## U.S. Market and Sector ETFs
+# U.S. Market and Sector ETFs
 ```{r loadetf_map, echo=F}
 etfs <- data.table::fread('./data/etfs.csv')
 knitr::kable(etfs, caption="US Market and Sector Index ETFs")

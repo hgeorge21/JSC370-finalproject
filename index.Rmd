@@ -1,13 +1,13 @@
 ---
-title: "Introduction"
+title: "Analysis on Inflation"
 output: 
     html_document:
         toc: TRUE
         toc_float: TRUE
 params:
   portfolio: "sample.csv"
-
 ---
+# Background
 This project aims to answer how inflation is tied to an economy and the economic growth, and how one may combat inflation.
 
 We currently live in a special time in history. While we are still dealing with an ongoing global pandemic,
