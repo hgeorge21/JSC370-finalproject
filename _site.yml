@@ -6,9 +6,9 @@ navbar:
     - text: "Home"
       href: index.html
     - text: "Global Economy"
-      href: visualization.html
+      href: global.html
     - text: "U.S. Economy and Market"
-      href: portfolio.html
+      href: USonly.html
     - text: "Data Analytics"
       href: analytics.html
   right:
