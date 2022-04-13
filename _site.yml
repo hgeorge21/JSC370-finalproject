@@ -5,12 +5,12 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-    - text: "Visualizations"
+    - text: "Global Economy"
       href: visualization.html
+    - text: "U.S. Economy and Market"
+      href: portfolio.html
     - text: "Data Analytics"
       href: analytics.html
-    - text: "Portfolio Construtor"
-      href: portfolio.html
   right:
     - icon: fa-github fa-lg
       href: https://github.com/JSC370/jsc370-2022/

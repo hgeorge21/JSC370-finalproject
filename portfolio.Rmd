@@ -13,6 +13,8 @@ library(plotly)
 ```
 
 # Overview
+*DISCLAIMER: This page does not imply any investment advice of opinion in any shape or form*
+
 Here, we will examine the performance of different asset classes and
 how they correlate with inflation. The main ones we will focus on are
 
